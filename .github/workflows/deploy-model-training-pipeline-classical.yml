@@ -20,8 +20,10 @@ jobs:
       cluster_tier: Dedicated  # This is the tier for your compute cluster (e.g., dedicated)
       # resource_group: ${{ needs.get-config.outputs.resource_group }}
       # workspace_name: ${{ needs.get-config.outputs.aml_workspace }}  
-      resource_group: "${{ secrets.AZURE_RESOURCE_GROUP }}"
-      workspace_name: "${{ secrets.AML_WORKSPACE }}"
+      run: |
+        az ml pipeline create --file path/to/pipeline.yml \
+          --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+          --workspace-name "${{ secrets.AML_WORKSPACE }}"
     secrets:
       creds: ${{secrets.AZURE_CREDENTIALS}}
         
@@ -29,8 +31,10 @@ jobs:
     needs: get-config
     uses: Azure/mlops-templates/.github/workflows/register-dataset.yml@main
     with:
-      resource_group: "${{ secrets.AZURE_RESOURCE_GROUP }}"
-      workspace_name: "${{ secrets.AML_WORKSPACE }}"
+      run: |
+        az ml pipeline create --file path/to/pipeline.yml \
+          --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+          --workspace-name "${{ secrets.AML_WORKSPACE }}"
       name: used-cars-data
       data_file: mlops/azureml/train/data.yml
     secrets:
@@ -40,8 +44,10 @@ jobs:
     needs: get-config
     uses: Azure/mlops-templates/.github/workflows/register-environment.yml@main
     with:
-      resource_group: "${{ secrets.AZURE_RESOURCE_GROUP }}"
-      workspace_name: "${{ secrets.AML_WORKSPACE }}"
+      run: |
+        az ml pipeline create --file path/to/pipeline.yml \
+          --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+          --workspace-name "${{ secrets.AML_WORKSPACE }}"
       environment_file:  mlops/azureml/train/train-env.yml
       conda_file: data-science/environment/train-conda.yml
     secrets:
@@ -51,8 +57,10 @@ jobs:
     needs: [get-config, register-environment, create-compute, register-dataset]
     uses: Azure/mlops-templates/.github/workflows/run-pipeline.yml@main
     with:
-      resource_group: "${{ secrets.AZURE_RESOURCE_GROUP }}"
-      workspace_name: "${{ secrets.AML_WORKSPACE }}"
+      run: |
+        az ml pipeline create --file path/to/pipeline.yml \
+          --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+          --workspace-name "${{ secrets.AML_WORKSPACE }}"
       parameters-file:  mlops/azureml/train/newpipeline.yml
       job-name: mlops-pipeline
     secrets:
