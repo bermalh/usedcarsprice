@@ -8,6 +8,16 @@ jobs:
     with:
       file_name: config-infra-prod.yml
 
+ deploy-model-training:
+    needs: get-config  # Ensures get-config runs first
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy ML Model Training Pipeline
+        run: |
+          az ml pipeline create --file path/to/pipeline.yml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+
   create-compute:
     needs: get-config
     uses: Azure/mlops-templates/.github/workflows/create-compute.yml@main
