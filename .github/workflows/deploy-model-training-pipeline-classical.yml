@@ -8,9 +8,24 @@ on:
 
 jobs:
   get-config:
-    uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
-    with:
-      file_name: config-infra-prod.yml
+    runs-on: ubuntu-latest
+    outputs:
+      resource_group: ${{ steps.extract.outputs.resource_group }}
+      aml_workspace: ${{ steps.extract.outputs.aml_workspace }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install yq
+        run: sudo apt-get install -y yq
+
+      - name: Extract Config Values
+        id: extract
+        run: |
+          echo "resource_group=$(yq '.resource_group' config-infra-prod.yml)" >> $GITHUB_ENV
+          echo "aml_workspace=$(yq '.aml_workspace' config-infra-prod.yml)" >> $GITHUB_ENV
+          echo "::set-output name=resource_group::$(yq '.resource_group' config-infra-prod.yml)"
+          echo "::set-output name=aml_workspace::$(yq '.aml_workspace' config-infra-prod.yml)"
 
   debug-config:
     needs: get-config
