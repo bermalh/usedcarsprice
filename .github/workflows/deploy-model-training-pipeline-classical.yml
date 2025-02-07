@@ -11,6 +11,14 @@ jobs:
     uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
     with:
       file_name: config-infra-prod.yml
+    outputs:
+      resource_group: ${{ steps.extract.outputs.resource_group }}
+      aml_workspace: ${{ steps.extract.outputs.aml_workspace }}
+    steps:
+      - name: Debug Outputs
+        run: |
+          echo "Resource Group: ${{ steps.extract.outputs.resource_group }}"
+          echo "AML Workspace: ${{ steps.extract.outputs.aml_workspace }}"
 
   deploy-model-training:
     needs: get-config  # Ensures get-config runs first
