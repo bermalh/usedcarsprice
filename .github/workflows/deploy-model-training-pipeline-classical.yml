@@ -27,7 +27,15 @@ jobs:
           fi
       
       - name: Install yq
-        run: sudo apt-get install -y yq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yq
+
+      - name: Test yq Extraction
+        run: |
+          echo "Testing yq Extraction..."
+          yq e '.resource_group' config-infra-prod.yml
+          yq e '.aml_workspace' config-infra-prod.yml
 
       - name: Extract Config Values
         id: extract
