@@ -3,7 +3,7 @@ name: deploy-model-training-pipeline
 on: 
   workflow_dispatch:
 jobs:
-  get-config:
+  get-config: 
     uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
     with:
       file_name: config-infra-prod.yml
