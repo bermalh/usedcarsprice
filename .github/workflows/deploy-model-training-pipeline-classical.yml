@@ -25,6 +25,25 @@ jobs:
             echo "config-infra-prod.yml NOT FOUND!"
             exit 1
           fi
+      
+      - name: Install yq
+        run: sudo apt-get install -y yq
+
+      - name: Extract Config Values
+        id: extract
+        run: |
+          export RESOURCE_GROUP=$(yq e '.resource_group' ./config-infra-prod.yml)
+          export AML_WORKSPACE=$(yq e '.aml_workspace' ./config-infra-prod.yml)
+
+          echo "Extracted RESOURCE_GROUP: $RESOURCE_GROUP"
+          echo "Extracted AML_WORKSPACE: $AML_WORKSPACE"
+
+          echo "resource_group=$RESOURCE_GROUP" >> $GITHUB_ENV
+          echo "aml_workspace=$AML_WORKSPACE" >> $GITHUB_ENV
+
+          echo "::set-output name=resource_group::$RESOURCE_GROUP"
+          echo "::set-output name=aml_workspace::$AML_WORKSPACE"
+
 
   debug-config:
     needs: get-config
