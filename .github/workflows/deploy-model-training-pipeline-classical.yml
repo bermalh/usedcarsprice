@@ -26,11 +26,14 @@ jobs:
             exit 1
           fi
       
-      - name: Install yq
+      - name: Install `yq` (Latest Version)
         run: |
-          sudo apt update
-          sudo apt install -y yq
+          YQ_VERSION=v4.35.2  # Ensure this is the latest version
+          wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 -O /usr/local/bin/yq
+          chmod +x /usr/local/bin/yq
+          echo "Installed `yq` version:"
           yq --version
+
 
       - name: Test yq Extraction
         run: |
