@@ -8,7 +8,7 @@ jobs:
     with:
       file_name: config-infra-prod.yml
 
- deploy-model-training:
+ deploy-model-training: 
     needs: get-config  # Ensures get-config runs first
     runs-on: ubuntu-latest
     steps:
