@@ -16,16 +16,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install yq
-        run: sudo apt-get install -y yq
-
-      - name: Extract Config Values
-        id: extract
+      - name: Verify YAML File Exists
         run: |
-          echo "resource_group=$(yq '.resource_group' config-infra-prod.yml)" >> $GITHUB_ENV
-          echo "aml_workspace=$(yq '.aml_workspace' config-infra-prod.yml)" >> $GITHUB_ENV
-          echo "::set-output name=resource_group::$(yq '.resource_group' config-infra-prod.yml)"
-          echo "::set-output name=aml_workspace::$(yq '.aml_workspace' config-infra-prod.yml)"
+          if [ -f config-infra-prod.yml ]; then
+            echo "File exists!"
+            cat config-infra-prod.yml
+          else
+            echo "config-infra-prod.yml NOT FOUND!"
+            exit 1
+          fi
 
   debug-config:
     needs: get-config
