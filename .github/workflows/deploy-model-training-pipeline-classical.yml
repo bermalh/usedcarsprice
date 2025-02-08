@@ -77,7 +77,7 @@ jobs:
 
       - name: Deploy ML Model Training Pipeline
         run: |
-          az ml pipeline create --file .github/workflows/mlops/azureml/train/newpipeline.yml \
+          az ml job create --file .github/workflows/mlops/azureml/train/newpipeline.yml \
           --resource-group "${{ needs.get-config.outputs.resource_group }}" \
           --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
           
