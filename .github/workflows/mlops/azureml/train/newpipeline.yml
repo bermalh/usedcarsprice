@@ -50,12 +50,14 @@ jobs:
       model_output:
         type: mlflow_model
     sampling_algorithm: random  # Specify the sampling algorithm
-    trial: ./train.yml  # Refers to a separate command component
+    trial:
+      type: command 
+      command: ./train.yml  # Refers to a separate command component
     search_space:
-      n_estimators: 30
+      n_estimators: "30"
         # type: choice
         # values: [10, 20, 30, 50]
-      max_depth: 10
+      max_depth: "10"
         # type: choice  # Specify the type for max_depth
         # values: [5, 10, 15, 20, null]  # Provide the values for max_depth
     objective:
