@@ -26,7 +26,7 @@ jobs:
   prep_data:
     name: data_preparation
     display_name: data-preparation-step
-    code: .github/workflows/data-science/src
+    code: ../../../data-science/src
     command: >-
       python prep.py
       --raw_data ${{inputs.raw_data}}
@@ -60,16 +60,16 @@ jobs:
       model_output:
         type: mlflow_model
     sampling_algorithm: random
-    trial:
-      type: command
-      command: python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}
+    trial: 
+      type: command_component  # ✅ Corrected
+      component: azureml:train_component@latest  # ✅ Replace with your registered component
     search_space:
       n_estimators: 
         type: choice
-        values: [30]  # Fixed: Wrapped in a list since `choice` expects an array
+        values: [30]  
       max_depth: 
         type: choice
-        values: [10]  # Fixed: Wrapped in a list
+        values: [10]  
     objective:
       goal: minimize
       primary_metric: MSE
@@ -78,10 +78,11 @@ jobs:
       max_concurrent_trials: 10
       timeout: 7200
 
+
   register_model:
     name: register_trained_model
     display_name: model-registration-step
-    code: .github/workflows/data-science/src
+    code: ../../../data-science/src
     command: >-
       python register.py
       --model_name ${{inputs.model_name}}
