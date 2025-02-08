@@ -32,8 +32,8 @@ def main(args):
     '''Read train and test datasets, train model, evaluate model, save trained model'''
 
     # Read train and test data from _______
-    train_df = pd.read_csv(Path(args.train_data) / "used_cars.csv")
-    test_df = pd.read_csv(Path(args.test_data) / "used_cars.csv")
+    train_df = pd.read_csv(Path(args.train_data) / ".github/workflows/mlops/azureml/train/used_cars.csv")
+    test_df = pd.read_csv(Path(args.test_data) / ".github/workflows/mlops/azureml/train/used_cars.csv")
 
     # Split the data into features (X) and target (y) 
     y_train = train_df['price']  # Specify the target column
