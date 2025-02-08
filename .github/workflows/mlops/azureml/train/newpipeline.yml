@@ -65,11 +65,11 @@ jobs:
       component: azureml:train_component@latest  # ✅ Replace with your registered component
     search_space:
       n_estimators: 
-        type: choice
-        values: [30]  
+        type: integer
+        values: 30 
       max_depth: 
-        type: choice
-        values: [10]  
+        type: integer
+        values: 10  
     objective:
       goal: minimize
       primary_metric: MSE
