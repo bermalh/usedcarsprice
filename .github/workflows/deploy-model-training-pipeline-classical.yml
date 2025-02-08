@@ -70,11 +70,17 @@ jobs:
     needs: get-config  # Ensures get-config runs first
     runs-on: ubuntu-latest
     steps:
+      - name: Install Azure ML CLI Extension
+        run: |
+          az extension add --name ml --yes  
+          az extension list | grep "ml"  
+
       - name: Deploy ML Model Training Pipeline
         run: |
           az ml pipeline create --file path/to/pipeline.yml \
           --resource-group "${{ needs.get-config.outputs.resource_group }}" \
           --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+
 
   create-compute:
     needs: get-config
@@ -97,8 +103,7 @@ jobs:
       resource_group: ${{ needs.get-config.outputs.resource_group }}
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
       name: used-cars-data
-      data_file: .github/workflows/mlops/azureml/train/data.yml
-      
+      data_file: mlops/azureml/train/data.yml
     secrets:
       creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -108,8 +113,8 @@ jobs:
     with:
       resource_group: ${{ needs.get-config.outputs.resource_group }}
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-      environment_file: .github/workflows/mlops/azureml/train/train-env.yml
-      conda_file: .github/workflows/data-science/environment/train-conda.yml
+      environment_file: mlops/azureml/train/train-env.yml
+      conda_file: data-science/environment/train-conda.yml
     secrets:
       creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -119,7 +124,7 @@ jobs:
     with:
       resource_group: ${{ needs.get-config.outputs.resource_group }}
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-      parameters-file: .github/workflows/mlops/azureml/train/newpipeline.yml
+      parameters-file: mlops/azureml/train/newpipeline.yml
       job-name: mlops-pipeline
     secrets:
       creds: ${{ secrets.AZURE_CREDENTIALS }}
