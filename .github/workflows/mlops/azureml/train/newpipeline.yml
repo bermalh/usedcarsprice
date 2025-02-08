@@ -52,12 +52,12 @@ jobs:
     sampling_algorithm: random  # Specify the sampling algorithm
     trial: ./train.yml  # Refers to a separate command component
     search_space:
-      n_estimators:
-        type: choice
-        values: [10, 20, 30, 50]
-      max_depth:
-        type: choice  # Specify the type for max_depth
-        values: [5, 10, 15, 20, null]  # Provide the values for max_depth
+      n_estimators: 30
+        # type: choice
+        # values: [10, 20, 30, 50]
+      max_depth: 10
+        # type: choice  # Specify the type for max_depth
+        # values: [5, 10, 15, 20, null]  # Provide the values for max_depth
     objective:
       goal: minimize
       primary_metric: MSE
