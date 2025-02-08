@@ -26,7 +26,7 @@ jobs:
   prep_data:
     name: data_preparation
     display_name: data-preparation-step
-    code: ../../../data-science/src
+    code: .github/workflows/data-science/src
     command: >-
       python prep.py
       --raw_data ${{inputs.raw_data}}
@@ -81,7 +81,7 @@ jobs:
   register_model:
     name: register_trained_model
     display_name: model-registration-step
-    code: ../../../data-science/src
+    code: .github/workflows/data-science/src
     command: >-
       python register.py
       --model_name ${{inputs.model_name}}
