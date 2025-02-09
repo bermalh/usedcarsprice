@@ -67,15 +67,7 @@ jobs:
           echo "Resource Group: ${{ needs.get-config.outputs.resource_group }}"
           echo "AML Workspace: ${{ needs.get-config.outputs.aml_workspace }}"
 
-  deploy-model-training:
-    needs: get-config
-    uses: Azure/mlops-templates/.github/workflows/run-pipeline.yml@main
-    with:
-      resource_group: ${{ needs.get-config.outputs.resource_group }}
-      workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-      pipeline_file: .github/workflows/mlops/azureml/train/newpipeline.yml
-    secrets:
-      creds: ${{ secrets.AZURE_CREDENTIALS }}
+  
           
   create-compute:
     needs: get-config
