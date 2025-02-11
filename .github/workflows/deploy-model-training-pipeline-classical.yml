@@ -81,6 +81,7 @@ jobs:
           az extension add --name ml --yes  
           az extension list | grep "ml"  
 
+
       - name: Deploy ML Model Training Pipeline
         run: |
           az ml job create --file .github/workflows/mlops/azureml/train/newpipeline.yml \
