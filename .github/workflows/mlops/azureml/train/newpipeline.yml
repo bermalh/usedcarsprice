@@ -50,9 +50,9 @@ jobs:
       model_output:
         type: mlflow_model
     sampling_algorithm: random
-    trial: 
-      type: command 
-      command: python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}
+    trial:
+      command_component:
+        command: python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}
     search_space:
       n_estimators: 
         type: choice
