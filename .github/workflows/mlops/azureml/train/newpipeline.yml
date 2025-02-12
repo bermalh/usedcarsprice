@@ -6,14 +6,14 @@ description: Pipeline for training and registering used cars price prediction mo
 
 inputs:
   raw_data:
-    type: mltable 
+    type: uri_folder
     path: azureml:used-cars-data@latest
 
 outputs:
   train_data:
-    type: mltable 
+    type: uri_folder
   test_data:
-    type: mltable
+    type: uri_folder
   model_info_output_path:
     type: uri_folder
 
@@ -34,28 +34,18 @@ jobs:
       --test_data ${{outputs.test_data}}
     environment: azureml:used-cars-train-env@latest
     inputs:
-      raw_data: 
-        type: mltable
-        source: ${{parent.inputs.raw_data}}
+      raw_data: ${{parent.inputs.raw_data}}
     outputs:
-      train_data:
-        type: mltable
-        destination: ${{parent.outputs.train_data}}
-      test_data:
-        type: mltable
-        destination: ${{parent.outputs.test_data}}
+      train_data: ${{parent.outputs.train_data}}
+      test_data: ${{parent.outputs.test_data}}
 
   sweep_step:
     name: hyperparameter_tuning
     display_name: hyperparameter-tuning-step
     type: sweep
     inputs:
-      train_data:
-        type: mltable
-        source: ${{parent.jobs.prep_data.outputs.train_data}}
-      test_data:
-        type: mltable
-        source: ${{parent.jobs.prep_data.outputs.test_data}}
+      train_data: ${{parent.jobs.prep_data.outputs.train_data}}
+      test_data: ${{parent.jobs.prep_data.outputs.test_data}}
     outputs:
       model_output:
         type: mlflow_model
@@ -89,10 +79,6 @@ jobs:
       --model_info_output_path ${{outputs.model_info_output_path}}
     environment: azureml:used-cars-train-env@latest
     inputs:
-      model_path:
-        type: mlflow_model
-        source: ${{parent.jobs.sweep_step.outputs.model_output}}
+      model_path: ${{parent.jobs.sweep_step.outputs.model_output}}
     outputs:
-      model_info_output_path:
-        type: uri_folder
-        destination: ${{parent.outputs.model_info_output_path}}
+      model_info_output_path: ${{parent.outputs.model_info_output_path}}
