@@ -24,7 +24,6 @@ settings:
 
 jobs:
   prep_data:
-    type: command
     name: data_preparation
     display_name: data-preparation-step
     code: ../../../data-science/src
@@ -41,9 +40,9 @@ jobs:
       test_data: ${{parent.outputs.test_data}}
 
   sweep_step:
-    type: sweep
     name: hyperparameter_tuning
     display_name: hyperparameter-tuning-step
+    type: sweep
     inputs:
       train_data: ${{parent.jobs.prep_data.outputs.train_data}}
       test_data: ${{parent.jobs.prep_data.outputs.test_data}}
@@ -53,12 +52,7 @@ jobs:
     sampling_algorithm: random
     trial:
       command_component:
-        type: command
-        name: train_component
-        display_name: Training Component
         command: python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}
-        code: ../../../data-science/src
-        environment: azureml:used-cars-train-env@latest
     search_space:
       n_estimators: 
         type: choice
@@ -75,7 +69,6 @@ jobs:
       timeout: 7200
 
   register_model:
-    type: command
     name: register_trained_model
     display_name: model-registration-step
     code: ../../../data-science/src
