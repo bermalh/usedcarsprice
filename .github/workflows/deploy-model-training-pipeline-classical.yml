@@ -146,7 +146,7 @@ jobs:
 
       - name: Train component
         run: |
-          az ml component create --file traincomponent.yml
+          az ml component create --file .github/workflows/mlops/azureml/train/traincomponent.yml
           
       
       - name: Deploy ML Model Training Pipeline
