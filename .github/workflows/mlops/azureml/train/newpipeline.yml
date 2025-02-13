@@ -56,10 +56,10 @@ jobs:
     search_space:
       n_estimators: 
         type: choice
-        values: [30]  
+        values: [50]  
       max_depth: 
         type: choice
-        values: [10]  
+        values: [60]  
     objective:
       goal: minimize
       primary_metric: MSE
