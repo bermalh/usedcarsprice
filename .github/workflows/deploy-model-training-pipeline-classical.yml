@@ -106,24 +106,7 @@ jobs:
     secrets:
       creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
-  name: train_model
-  display_name: Train Model Component
-  version: 1
-  type: command
-  inputs:
-    train_data: 
-      type: uri_folder
-    test_data: 
-      type: uri_folder
-  outputs:
-    model_output:
-      type: mlflow_model
-  code: ../../../data-science/src
-  command: >-
-    python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}
-  environment: azureml:used-cars-train-env@latest
-
+ 
 
   run-pipeline:
     needs: [get-config, register-environment, create-compute, register-dataset]
@@ -161,6 +144,16 @@ jobs:
         run: |
           ls -l .github/workflows/mlops/azureml/train/
 
+      - name: Deploy ML Training Component
+        run: |
+          az ml component create --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+                                 --workspace-name "${{ needs.get-config.outputs.aml_workspace }}" \
+                                 --name train_model --version 1 --type command --code . --environment azureml:used-cars-train-env@latest \
+                                 --command "python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}" \
+                                 --inputs train_data=uri_folder test_data=uri_folder \
+                                 --outputs model_output=mlflow_model
+
+  
       - name: Deploy ML Model Training Pipeline
         run: |
           az ml job create --file .github/workflows/mlops/azureml/train/newpipeline.yml \
