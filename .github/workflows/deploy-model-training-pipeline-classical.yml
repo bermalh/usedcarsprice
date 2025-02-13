@@ -144,16 +144,11 @@ jobs:
         run: |
           ls -l .github/workflows/mlops/azureml/train/
 
-      - name: Deploy ML Training Component
+      - name: Train component
         run: |
-          az ml component create --resource-group "${{ needs.get-config.outputs.resource_group }}" \
-                                 --workspace-name "${{ needs.get-config.outputs.aml_workspace }}" \
-                                 --name train_model --version 1 --type command --code . --environment azureml:used-cars-train-env@latest \
-                                 --command "python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}" \
-                                 --inputs train_data=uri_folder test_data=uri_folder \
-                                 --outputs model_output=mlflow_model
-
-  
+          az ml component create --file traincomponent.yml
+          
+      
       - name: Deploy ML Model Training Pipeline
         run: |
           az ml job create --file .github/workflows/mlops/azureml/train/newpipeline.yml \
