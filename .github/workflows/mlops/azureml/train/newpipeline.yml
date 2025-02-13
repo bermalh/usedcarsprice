@@ -51,15 +51,14 @@ jobs:
         type: mlflow_model
     sampling_algorithm: random
     trial:
-      command_component:
-        command: python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}
+      component: azureml:train_model:1  
     search_space:
       n_estimators: 
         type: choice
-        values: [50]  
+        values: [30]  
       max_depth: 
         type: choice
-        values: [60]  
+        values: [10]  
     objective:
       goal: minimize
       primary_metric: MSE
