@@ -83,7 +83,11 @@ jobs:
         run: |
           az extension add --name ml --yes  
           az extension list | grep "ml"
-
+          
+      - name: Install Azure ML CLI Extension
+        run: |
+          az extension update -n ml 
+          
       - name: Verify File Exists
         run: |
           ls -l .github/workflows/mlops/azureml/train/
