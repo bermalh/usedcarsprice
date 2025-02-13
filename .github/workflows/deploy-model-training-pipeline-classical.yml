@@ -106,6 +106,25 @@ jobs:
     secrets:
       creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+  $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+  name: train_model
+  display_name: Train Model Component
+  version: 1
+  type: command
+  inputs:
+    train_data: 
+      type: uri_folder
+    test_data: 
+      type: uri_folder
+  outputs:
+    model_output:
+      type: mlflow_model
+  code: ../../../data-science/src
+  command: >-
+    python train.py --train_data ${{inputs.train_data}} --test_data ${{inputs.test_data}}
+  environment: azureml:used-cars-train-env@latest
+
+
   run-pipeline:
     needs: [get-config, register-environment, create-compute, register-dataset]
     uses: Azure/mlops-templates/.github/workflows/run-pipeline.yml@main
