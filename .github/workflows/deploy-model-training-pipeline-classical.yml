@@ -67,37 +67,7 @@ jobs:
           echo "Resource Group: ${{ needs.get-config.outputs.resource_group }}"
           echo "AML Workspace: ${{ needs.get-config.outputs.aml_workspace }}"
 
-  deploy-model-training:
-    needs: get-config
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Install Azure ML CLI Extension
-        run: |
-          az extension add --name ml --yes  
-          az extension list | grep "ml"
-          
-      - name: Install Azure ML CLI Extension
-        run: |
-          az extension update -n ml 
-          
-      - name: Verify File Exists
-        run: |
-          ls -l .github/workflows/mlops/azureml/train/
-
-      - name: Deploy ML Model Training Pipeline
-        run: |
-          az ml job create --file .github/workflows/mlops/azureml/train/newpipeline.yml \
-          --resource-group "${{ needs.get-config.outputs.resource_group }}" \
-          --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
-
+  
           
   create-compute:
     needs: get-config
@@ -146,3 +116,35 @@ jobs:
       job-name: mlops-pipeline
     secrets:
       creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+  deploy-model-training:
+    needs: [get-config, register-environment, create-compute, register-dataset]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install Azure ML CLI Extension
+        run: |
+          az extension add --name ml --yes  
+          az extension list | grep "ml"
+          
+      - name: Update Azure ML CLI Extension
+        run: |
+          az extension update -n ml 
+          
+      - name: Verify File Exists
+        run: |
+          ls -l .github/workflows/mlops/azureml/train/
+
+      - name: Deploy ML Model Training Pipeline
+        run: |
+          az ml job create --file .github/workflows/mlops/azureml/train/newpipeline.yml \
+          --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+          --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+
