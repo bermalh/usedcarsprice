@@ -47,9 +47,10 @@ jobs:
       train_data: ${{parent.jobs.prep_data.outputs.train_data}}
       test_data: ${{parent.jobs.prep_data.outputs.test_data}}
     outputs:
-      model_output: ${{parent.jobs.sweep_step.outputs.model_output}}
-        #type: mlflow_model
-        #mode: upload
+      model_output: 
+        type: mlflow_model
+        mode: upload
+        path: azureml://datastores/workspaceblobstore/paths/output/model_output/
     sampling_algorithm: random
     trial:
       command: >-
