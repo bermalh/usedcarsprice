@@ -49,6 +49,7 @@ jobs:
     outputs:
       model_output:
         type: mlflow_model
+        mode: upload
     sampling_algorithm: random
     trial:
       command: >-
