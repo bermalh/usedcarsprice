@@ -52,6 +52,7 @@ jobs:
     sampling_algorithm: random
     trial:
       component: 'azureml:train_model:1'  
+      environment: azureml:used-cars-train-env@latest
     search_space:
       n_estimators: 
         type: choice
