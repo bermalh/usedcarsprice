@@ -41,14 +41,14 @@ jobs:
 
   sweep_step:
     name: hyperparameter_tuning
-    display_name: hyperparameter-tuning-step
+    # display_name: hyperparameter-tuning-step
     type: sweep
     inputs:
       train_data: ${{parent.jobs.prep_data.outputs.train_data}}
       test_data: ${{parent.jobs.prep_data.outputs.test_data}}
     outputs:
       model_output:
-        type: mlflow_model
+        type: custom_model
     sampling_algorithm: random
     trial:
       component: azureml:train_model:1  
