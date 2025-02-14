@@ -48,10 +48,10 @@ jobs:
       test_data: ${{parent.jobs.prep_data.outputs.test_data}}
     outputs:
       model_output:
-        type: custom_model
+        type: mlflow_model
     sampling_algorithm: random
     trial:
-      component: azureml:train_model:1  
+      component: 'azureml:train_model:1'  
     search_space:
       n_estimators: 
         type: choice
